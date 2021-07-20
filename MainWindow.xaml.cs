@@ -95,117 +95,237 @@ namespace optionsanalyzer
 
                 //datagrid1.Items.Add(new OptionsData { col1 = "a", col2 = "b" });
 
-                if (allcalls.Count > 0)
+                if (optiontype.SelectedIndex == 0)
                 {
-                    int csize = 0;
-                    int vsize = 0;
-
-                    for (int y = 0; y < allcalls.Count; y++)
+                    if (allcalls.Count > 0)
                     {
-                        /*
-                        if (allcalls[y].ToLower().Contains("contractsymbol"))
+                        int csize = 0;
+                        int vsize = 0;
+
+                        for (int y = 0; y < allcalls.Count; y++)
                         {
-                            string[] cname = allcalls[y].Split(':');
-
-                            //contractname.Items.Add(cname[1].Trim('"'));
-                            datagrid1.Items.Add(new OptionsData { col1 = cname[1].Trim().Trim('"') });
-                        }*/
-
-                        //MessageBox.Show(allcalls[y].ToLower());
-
-                        if (allcalls[y].ToLower().Contains("contractsymbol"))
-                        {
-                            string[] cname = allcalls[y].Split(':');
-                            coname.Add(cname[1].Trim().Trim('"'));
-
-                            if (csize != 0)
+                            /*
+                            if (allcalls[y].ToLower().Contains("contractsymbol"))
                             {
-                                if (csize != vsize)
+                                string[] cname = allcalls[y].Split(':');
+
+                                //contractname.Items.Add(cname[1].Trim('"'));
+                                datagrid1.Items.Add(new OptionsData { col1 = cname[1].Trim().Trim('"') });
+                            }*/
+
+                            //MessageBox.Show(allcalls[y].ToLower());
+
+                            if (allcalls[y].ToLower().Contains("contractsymbol"))
+                            {
+                                string[] cname = allcalls[y].Split(':');
+                                coname.Add(cname[1].Trim().Trim('"'));
+
+                                if (csize != 0)
                                 {
-                                    vol.Add("-");
-                                    vsize++;
+                                    if (csize != vsize)
+                                    {
+                                        vol.Add("-");
+                                        vsize++;
+                                    }
+
                                 }
+
+                                csize++;
+                            }
+
+                            if (allcalls[y].ToLower().Contains("lasttradedate"))
+                            {
+                                string[] cname = allcalls[y].Split(':');
+                                DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(long.Parse(cname[1].Trim().Trim('"')));
+                                //Console.WriteLine(dateTimeOffset2.ToString("MM-dd-yyyy hh:mm:ss tt"));
+
+                                ltdate.Add(dateTimeOffset.ToString("MM-dd-yyyy hh:mm:ss tt"));
+                            }
+
+                            if (allcalls[y].ToLower().Contains("strike"))
+                            {
+                                string[] cname = allcalls[y].Split(':');
+                                strike.Add(cname[1].Trim().Trim('"'));
+                            }
+
+                            if (allcalls[y].ToLower().Contains("lastprice"))
+                            {
+                                string[] cname = allcalls[y].Split(':');
+                                ltpr.Add(cname[1].Trim().Trim('"'));
+                            }
+
+                            if (allcalls[y].ToLower().Contains("bid"))
+                            {
+                                string[] cname = allcalls[y].Split(':');
+                                bid.Add(cname[1].Trim().Trim('"'));
+                            }
+
+                            if (allcalls[y].ToLower().Contains("ask"))
+                            {
+                                string[] cname = allcalls[y].Split(':');
+                                ask.Add(cname[1].Trim().Trim('"'));
+                            }
+
+                            if ((allcalls[y].ToLower().Contains("change")) & (!(allcalls[y].ToLower().Contains("percentchange"))))
+                            {
+                                string[] cname = allcalls[y].Split(':');
+                                double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
+                                temp = Math.Round(temp, 2);
+                                chg.Add(temp.ToString());
+                            }
+
+                            if (allcalls[y].ToLower().Contains("percentchange"))
+                            {
+                                string[] cname = allcalls[y].Split(':');
+                                double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
+                                temp = Math.Round(temp, 2);
+                                pchg.Add(temp.ToString() + "%");
+                            }
+
+                            if (allcalls[y].ToLower().Contains("volume"))
+                            {
+                                string[] cname = allcalls[y].Split(':');
+                                vol.Add(cname[1].Trim().Trim('"'));
+                                vsize++;
+                            }
+
+                            if (allcalls[y].ToLower().Contains("openinterest"))
+                            {
+                                string[] cname = allcalls[y].Split(':');
+                                oi.Add(cname[1].Trim().Trim('"'));
+                            }
+
+                            if (allcalls[y].ToLower().Contains("impliedvolatility"))
+                            {
+                                string[] cname = allcalls[y].Split(':');
+                                double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
+                                temp = Math.Round(temp * 100, 2);
+                                iv.Add(temp.ToString() + "%"); ;
 
                             }
 
-                            csize++;
-                        }
-
-                        if (allcalls[y].ToLower().Contains("lasttradedate"))
-                        {
-                            string[] cname = allcalls[y].Split(':');
-                            DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(long.Parse(cname[1].Trim().Trim('"')));
-                            //Console.WriteLine(dateTimeOffset2.ToString("MM-dd-yyyy hh:mm:ss tt"));
-
-                            ltdate.Add(dateTimeOffset.ToString("MM-dd-yyyy hh:mm:ss tt"));
-                        }
-
-                        if (allcalls[y].ToLower().Contains("strike"))
-                        {
-                            string[] cname = allcalls[y].Split(':');
-                            strike.Add(cname[1].Trim().Trim('"'));
-                        }
-
-                        if (allcalls[y].ToLower().Contains("lastprice"))
-                        {
-                            string[] cname = allcalls[y].Split(':');
-                            ltpr.Add(cname[1].Trim().Trim('"'));
-                        }
-
-                        if (allcalls[y].ToLower().Contains("bid"))
-                        {
-                            string[] cname = allcalls[y].Split(':');
-                            bid.Add(cname[1].Trim().Trim('"'));
-                        }
-
-                        if (allcalls[y].ToLower().Contains("ask"))
-                        {
-                            string[] cname = allcalls[y].Split(':');
-                            ask.Add(cname[1].Trim().Trim('"'));
-                        }
-
-                        if ((allcalls[y].ToLower().Contains("change")) & (!(allcalls[y].ToLower().Contains("percentchange"))))
-                        {
-                            string[] cname = allcalls[y].Split(':');
-                            double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
-                            temp = Math.Round(temp, 2);
-                            chg.Add(temp.ToString());
-                        }
-
-                        if (allcalls[y].ToLower().Contains("percentchange"))
-                        {
-                            string[] cname = allcalls[y].Split(':');
-                            double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
-                            temp = Math.Round(temp, 2);
-                            pchg.Add(temp.ToString() + "%");
-                        }
-
-                        if (allcalls[y].ToLower().Contains("volume"))
-                        {
-                            string[] cname = allcalls[y].Split(':');
-                            vol.Add(cname[1].Trim().Trim('"'));
-                            vsize++;
-                        }
-
-                        if (allcalls[y].ToLower().Contains("openinterest"))
-                        {
-                            string[] cname = allcalls[y].Split(':');
-                            oi.Add(cname[1].Trim().Trim('"'));
-                        }
-
-                        if (allcalls[y].ToLower().Contains("impliedvolatility"))
-                        {
-                            string[] cname = allcalls[y].Split(':');
-                            double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
-                            temp = Math.Round(temp*100, 2);
-                            iv.Add(temp.ToString() + "%"); ;
 
                         }
-
 
                     }
-
                 }
+
+
+                if (optiontype.SelectedIndex == 1)
+                {
+                    if (allputs.Count > 0)
+                    {
+                        int csize = 0;
+                        int vsize = 0;
+
+                        for (int y = 0; y < allputs.Count; y++)
+                        {
+                            /*
+                            if (allcalls[y].ToLower().Contains("contractsymbol"))
+                            {
+                                string[] cname = allcalls[y].Split(':');
+
+                                //contractname.Items.Add(cname[1].Trim('"'));
+                                datagrid1.Items.Add(new OptionsData { col1 = cname[1].Trim().Trim('"') });
+                            }*/
+
+                            //MessageBox.Show(allcalls[y].ToLower());
+
+                            if (allputs[y].ToLower().Contains("contractsymbol"))
+                            {
+                                string[] cname = allputs[y].Split(':');
+                                coname.Add(cname[1].Trim().Trim('"'));
+
+                                if (csize != 0)
+                                {
+                                    if (csize != vsize)
+                                    {
+                                        vol.Add("-");
+                                        vsize++;
+                                    }
+
+                                }
+
+                                csize++;
+                            }
+
+                            if (allputs[y].ToLower().Contains("lasttradedate"))
+                            {
+                                string[] cname = allputs[y].Split(':');
+                                DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(long.Parse(cname[1].Trim().Trim('"')));
+                                //Console.WriteLine(dateTimeOffset2.ToString("MM-dd-yyyy hh:mm:ss tt"));
+
+                                ltdate.Add(dateTimeOffset.ToString("MM-dd-yyyy hh:mm:ss tt"));
+                            }
+
+                            if (allputs[y].ToLower().Contains("strike"))
+                            {
+                                string[] cname = allputs[y].Split(':');
+                                strike.Add(cname[1].Trim().Trim('"'));
+                            }
+
+                            if (allputs[y].ToLower().Contains("lastprice"))
+                            {
+                                string[] cname = allputs[y].Split(':');
+                                ltpr.Add(cname[1].Trim().Trim('"'));
+                            }
+
+                            if (allputs[y].ToLower().Contains("bid"))
+                            {
+                                string[] cname = allputs[y].Split(':');
+                                bid.Add(cname[1].Trim().Trim('"'));
+                            }
+
+                            if (allputs[y].ToLower().Contains("ask"))
+                            {
+                                string[] cname = allputs[y].Split(':');
+                                ask.Add(cname[1].Trim().Trim('"'));
+                            }
+
+                            if ((allputs[y].ToLower().Contains("change")) & (!(allputs[y].ToLower().Contains("percentchange"))))
+                            {
+                                string[] cname = allputs[y].Split(':');
+                                double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
+                                temp = Math.Round(temp, 2);
+                                chg.Add(temp.ToString());
+                            }
+
+                            if (allputs[y].ToLower().Contains("percentchange"))
+                            {
+                                string[] cname = allputs[y].Split(':');
+                                double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
+                                temp = Math.Round(temp, 2);
+                                pchg.Add(temp.ToString() + "%");
+                            }
+
+                            if (allputs[y].ToLower().Contains("volume"))
+                            {
+                                string[] cname = allputs[y].Split(':');
+                                vol.Add(cname[1].Trim().Trim('"'));
+                                vsize++;
+                            }
+
+                            if (allputs[y].ToLower().Contains("openinterest"))
+                            {
+                                string[] cname = allputs[y].Split(':');
+                                oi.Add(cname[1].Trim().Trim('"'));
+                            }
+
+                            if (allputs[y].ToLower().Contains("impliedvolatility"))
+                            {
+                                string[] cname = allputs[y].Split(':');
+                                double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
+                                temp = Math.Round(temp * 100, 2);
+                                iv.Add(temp.ToString() + "%"); ;
+
+                            }
+
+
+                        }
+
+                    }
+                }
+
 
 
                 if (coname.Count > 0)
