@@ -7,34 +7,47 @@
         mc:Ignorable="d"
         Title="Options covered call analyzer" Height="550" Width="1050">
     <Grid Margin="0,0,-699,-97">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="37*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBox x:Name="symb" HorizontalAlignment="Left" Height="23" Margin="19,60,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="-0.056,0.7"/>
-        <TextBox x:Name="stcost" HorizontalAlignment="Left" Height="23" Margin="19,118,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="strike" HorizontalAlignment="Left" Height="23" Margin="19,183,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="premcol" HorizontalAlignment="Left" Height="23" Margin="19,234,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="cont" HorizontalAlignment="Left" Height="23" Margin="21,316,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="stprice" HorizontalAlignment="Left" Height="23" Margin="19,382,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txt1" HorizontalAlignment="Left" Height="23" Margin="176,61,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txt2" HorizontalAlignment="Left" Height="23" Margin="176,126,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txt3" HorizontalAlignment="Left" Height="23" Margin="176,191,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Label Content="symbol" HorizontalAlignment="Left" Margin="19,34,0,0" VerticalAlignment="Top" RenderTransformOrigin="-5,0.269"/>
-        <Label Content="cost basis of stock(1 share)&#xA;" HorizontalAlignment="Left" Margin="19,92,0,0" VerticalAlignment="Top" RenderTransformOrigin="-9.395,-0.769"/>
-        <Label Content="strike price" HorizontalAlignment="Left" Margin="19,157,0,0" VerticalAlignment="Top" RenderTransformOrigin="-9.5,-0.692"/>
-        <Label Content="premium collected" HorizontalAlignment="Left" Margin="19,211,0,0" VerticalAlignment="Top"/>
-        <Label Content="number of contracts&#xD;&#xA;100 shares owned per contract" HorizontalAlignment="Left" Margin="19,266,0,0" VerticalAlignment="Top"/>
-        <Label Content="current stock price" HorizontalAlignment="Left" Margin="19,356,0,0" VerticalAlignment="Top"/>
-        <Label Content="break even price" HorizontalAlignment="Left" Margin="176,35,0,0" VerticalAlignment="Top"/>
-        <Label Content="P&amp;L after option expires and sold at current price" HorizontalAlignment="Left" Margin="176,100,0,0" VerticalAlignment="Top"/>
-        <Label Content="P&amp;L after option expires and sold at strike price" HorizontalAlignment="Left" Margin="176,165,0,0" VerticalAlignment="Top"/>
-        <Button Content="Calculate" HorizontalAlignment="Left" Margin="176,234,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
-        <Button Content="Load current stock data" HorizontalAlignment="Left" Margin="19,6,0,0" VerticalAlignment="Top" Width="129" Click="Button_Click_2"/>
+        <TextBox x:Name="symb" HorizontalAlignment="Left" Height="23" Margin="356,32,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="-0.056,0.7"/>
+        <TextBox x:Name="stcost" HorizontalAlignment="Left" Height="23" Margin="19,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="1"/>
+        <TextBox x:Name="strike" HorizontalAlignment="Left" Height="23" Margin="19,85,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="1"/>
+        <TextBox x:Name="premcol" HorizontalAlignment="Left" Height="23" Margin="19,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="1"/>
+        <TextBox x:Name="cont" HorizontalAlignment="Left" Height="23" Margin="21,218,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="1"/>
+        <TextBox x:Name="stprice" HorizontalAlignment="Left" Height="23" Margin="177,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txt1" HorizontalAlignment="Left" Height="23" Margin="21,34,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txt2" HorizontalAlignment="Left" Height="23" Margin="176,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="1"/>
+        <TextBox x:Name="txt3" HorizontalAlignment="Left" Height="23" Margin="176,93,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="1"/>
+        <Label Content="symbol" HorizontalAlignment="Left" Margin="356,6,0,0" VerticalAlignment="Top" RenderTransformOrigin="-5,0.269"/>
+        <Label Content="cost basis of stock(1 share)&#xA;" HorizontalAlignment="Left" Margin="19,92,0,0" VerticalAlignment="Top" RenderTransformOrigin="-9.395,-0.769" Grid.RowSpan="2"/>
+        <Label Content="strike price" HorizontalAlignment="Left" Margin="19,59,0,0" VerticalAlignment="Top" RenderTransformOrigin="-9.5,-0.692" Grid.Row="1"/>
+        <Label Content="premium collected" HorizontalAlignment="Left" Margin="19,113,0,0" VerticalAlignment="Top" Grid.Row="1"/>
+        <Label Content="number of contracts&#xD;&#xA;100 shares owned per contract" HorizontalAlignment="Left" Margin="19,168,0,0" VerticalAlignment="Top" Grid.Row="1"/>
+        <Label Content="current stock price" HorizontalAlignment="Left" Margin="177,7,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleX="4.086"/>
+                    <RotateTransform/>
+                    <TranslateTransform X="0.929"/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <Label Content="break even price" HorizontalAlignment="Left" Margin="21,8,0,0" VerticalAlignment="Top"/>
+        <Label Content="P&amp;L after option expires and sold at current price" HorizontalAlignment="Left" Margin="176,2,0,0" VerticalAlignment="Top" Grid.Row="1"/>
+        <Label Content="P&amp;L after option expires and sold at strike price" HorizontalAlignment="Left" Margin="176,67,0,0" VerticalAlignment="Top" Grid.Row="1"/>
+        <Button Content="Calculate" HorizontalAlignment="Left" Margin="176,136,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1" Grid.Row="1"/>
+        <Button Content="Load current stock data" HorizontalAlignment="Left" Margin="559,8,0,0" VerticalAlignment="Top" Width="129" Click="Button_Click_2"/>
         <Button Content="Load option chain" HorizontalAlignment="Left" Margin="922,6,0,0" VerticalAlignment="Top" Width="111" Click="Button_Click" RenderTransformOrigin="0.495,0.35"/>
         <ComboBox x:Name="optiontype" HorizontalAlignment="Left" Margin="719,6,0,0" VerticalAlignment="Top" Width="67"/>
 
         <ComboBox x:Name="optiondate" HorizontalAlignment="Left" Margin="801,6,0,0" VerticalAlignment="Top" Width="103"/>
-        <DataGrid x:Name="datagrid1" HorizontalAlignment="Left" Height="454" Margin="487,49,0,0" VerticalAlignment="Top" Width="546">
+        <DataGrid x:Name="datagrid1" HorizontalAlignment="Left" Height="454" Margin="487,49,0,0" VerticalAlignment="Top" Width="546" Grid.RowSpan="2">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="col1" Header = "Contract Name" Binding = "{Binding Name}" />
                 <DataGridTextColumn x:Name="col2" Header = "Last Trade Date" Binding = "{Binding Name}" />

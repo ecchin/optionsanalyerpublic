@@ -101,6 +101,8 @@ namespace optionsanalyzer
                     {
                         int csize = 0;
                         int vsize = 0;
+                        int pchgsize = 0;
+                        int oisize = 0;
 
                         for (int y = 0; y < allcalls.Count; y++)
                         {
@@ -126,6 +128,18 @@ namespace optionsanalyzer
                                     {
                                         vol.Add("-");
                                         vsize++;
+                                    }
+
+                                    if (csize != pchgsize)
+                                    {
+                                        pchg.Add("-");
+                                        pchgsize++;
+                                    }
+
+                                    if (csize != oisize)
+                                    {
+                                        oi.Add("-");
+                                        oisize++;
                                     }
 
                                 }
@@ -180,6 +194,7 @@ namespace optionsanalyzer
                                 double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
                                 temp = Math.Round(temp, 2);
                                 pchg.Add(temp.ToString() + "%");
+                                pchgsize++;
                             }
 
                             if (allcalls[y].ToLower().Contains("volume"))
@@ -193,6 +208,7 @@ namespace optionsanalyzer
                             {
                                 string[] cname = allcalls[y].Split(':');
                                 oi.Add(cname[1].Trim().Trim('"'));
+                                oisize++;
                             }
 
                             if (allcalls[y].ToLower().Contains("impliedvolatility"))
@@ -207,6 +223,24 @@ namespace optionsanalyzer
 
                         }
 
+                        if (csize != vsize)
+                        {
+                            vol.Add("-");
+                            vsize++;
+                        }
+
+                        if (csize != pchgsize)
+                        {
+                            pchg.Add("-");
+                            pchgsize++;
+                        }
+
+                        if (csize != oisize)
+                        {
+                            oi.Add("-");
+                            oisize++;
+                        }
+
                     }
                 }
 
@@ -217,6 +251,8 @@ namespace optionsanalyzer
                     {
                         int csize = 0;
                         int vsize = 0;
+                        int pchgsize = 0;
+                        int oisize = 0;
 
                         for (int y = 0; y < allputs.Count; y++)
                         {
@@ -242,6 +278,18 @@ namespace optionsanalyzer
                                     {
                                         vol.Add("-");
                                         vsize++;
+                                    }
+
+                                    if (csize != pchgsize)
+                                    {
+                                        pchg.Add("-");
+                                        pchgsize++;
+                                    }
+
+                                    if (csize != oisize)
+                                    {
+                                        oi.Add("-");
+                                        oisize++;
                                     }
 
                                 }
@@ -296,6 +344,7 @@ namespace optionsanalyzer
                                 double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
                                 temp = Math.Round(temp, 2);
                                 pchg.Add(temp.ToString() + "%");
+                                pchgsize++;
                             }
 
                             if (allputs[y].ToLower().Contains("volume"))
@@ -309,6 +358,7 @@ namespace optionsanalyzer
                             {
                                 string[] cname = allputs[y].Split(':');
                                 oi.Add(cname[1].Trim().Trim('"'));
+                                oisize++;
                             }
 
                             if (allputs[y].ToLower().Contains("impliedvolatility"))
@@ -320,7 +370,24 @@ namespace optionsanalyzer
 
                             }
 
+                        }
 
+                        if (csize != vsize)
+                        {
+                            vol.Add("-");
+                            vsize++;
+                        }
+
+                        if (csize != pchgsize)
+                        {
+                            pchg.Add("-");
+                            pchgsize++;
+                        }
+
+                        if (csize != oisize)
+                        {
+                            oi.Add("-");
+                            oisize++;
                         }
 
                     }
