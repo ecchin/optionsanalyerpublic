@@ -471,14 +471,15 @@ namespace optionsanalyzer
 
                 if (expdate.Count > 0)
                 {
+                    optiondate.Items.Clear();
                     for (int y = 0; y < expdate.Count; y++)
                     {
                         DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expdate[y]));
                         optiondate.Items.Add(dateTimeOffset.ToString("MM-dd-yyyy"));
                     }
                 }
+                optiondate.SelectedIndex = 0;
 
-             
                 //datagrid1.Items.Add(new OptionsData { col1 = "a", col2 = "b" });             
 
                 /*
@@ -598,7 +599,7 @@ namespace optionsanalyzer
                             strikes.Add(test5[x].ToString());
                         }
 
-
+                        expdate.Clear();
                   
                         for (int x = 0; x < stuff4.optionChain.result[0].expirationDates.Count; x++)
                         {
