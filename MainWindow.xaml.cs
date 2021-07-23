@@ -44,6 +44,8 @@ namespace optionsanalyzer
         static List<string> expdate = new List<string>();
         static List<string> allcalls = new List<string>();
         static List<string> allputs = new List<string>();
+        static string lastsymbol = null;
+    
 
         public MainWindow()
         {
@@ -59,354 +61,578 @@ namespace optionsanalyzer
         {
             if (symb.Text.Length > 0)
             {
-                datagrid1.Items.Clear();
-
-                //DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(1603411200);
-                //DateTimeOffset dateTimeOffset2 = DateTimeOffset.FromUnixTimeSeconds(1601571384);
-
-                //MessageBox.Show(dateTimeOffset.ToString("MM-dd-yyyy"));
-                //Console.WriteLine(dateTimeOffset2.ToString("MM-dd-yyyy hh:mm:ss tt"));
-                List<string> coname = new List<string>();
-                List<string> ltdate = new List<string>();
-                List<string> strike = new List<string>();
-                List<string> ltpr = new List<string>();
-                List<string> bid = new List<string>();
-                List<string> ask = new List<string>();
-                List<string> chg = new List<string>();
-                List<string> pchg = new List<string>();
-                List<string> vol = new List<string>();
-                List<string> oi = new List<string>();
-                List<string> iv = new List<string>();
-
-                Task<int> datatask = DownloadYfinanceoptions(symb.Text, optiondate.SelectedIndex, optiontype.SelectedIndex);
-                int x = await datatask;
-
-                col1.Binding = new Binding("col1");
-                col2.Binding = new Binding("col2");
-                col3.Binding = new Binding("col3");
-                col4.Binding = new Binding("col4");
-                col5.Binding = new Binding("col5");
-                col6.Binding = new Binding("col6");
-                col7.Binding = new Binding("col7");
-                col8.Binding = new Binding("col8");
-                col9.Binding = new Binding("col9");
-                col10.Binding = new Binding("col10");
-                col11.Binding = new Binding("col11");
-
-                //datagrid1.Items.Add(new OptionsData { col1 = "a", col2 = "b" });
-
-                if (optiontype.SelectedIndex == 0)
+                if (symb.Text == lastsymbol)
                 {
-                    if (allcalls.Count > 0)
+
+                    datagrid1.Items.Clear();
+
+                    //DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(1603411200);
+                    //DateTimeOffset dateTimeOffset2 = DateTimeOffset.FromUnixTimeSeconds(1601571384);
+
+                    //MessageBox.Show(dateTimeOffset.ToString("MM-dd-yyyy"));
+                    //Console.WriteLine(dateTimeOffset2.ToString("MM-dd-yyyy hh:mm:ss tt"));
+                    List<string> coname = new List<string>();
+                    List<string> ltdate = new List<string>();
+                    List<string> strike = new List<string>();
+                    List<string> ltpr = new List<string>();
+                    List<string> bid = new List<string>();
+                    List<string> ask = new List<string>();
+                    List<string> chg = new List<string>();
+                    List<string> pchg = new List<string>();
+                    List<string> vol = new List<string>();
+                    List<string> oi = new List<string>();
+                    List<string> iv = new List<string>();
+
+                    Task<int> datatask = DownloadYfinanceoptions(symb.Text, optiondate.SelectedIndex, optiontype.SelectedIndex);
+                    int x = await datatask;
+
+                    col1.Binding = new Binding("col1");
+                    col2.Binding = new Binding("col2");
+                    col3.Binding = new Binding("col3");
+                    col4.Binding = new Binding("col4");
+                    col5.Binding = new Binding("col5");
+                    col6.Binding = new Binding("col6");
+                    col7.Binding = new Binding("col7");
+                    col8.Binding = new Binding("col8");
+                    col9.Binding = new Binding("col9");
+                    col10.Binding = new Binding("col10");
+                    col11.Binding = new Binding("col11");
+
+                    //datagrid1.Items.Add(new OptionsData { col1 = "a", col2 = "b" });
+
+                    if (optiontype.SelectedIndex == 0)
                     {
-                        int csize = 0;
-                        int vsize = 0;
-                        int pchgsize = 0;
-                        int oisize = 0;
-
-                        for (int y = 0; y < allcalls.Count; y++)
+                        if (allcalls.Count > 0)
                         {
-                            /*
-                            if (allcalls[y].ToLower().Contains("contractsymbol"))
+                            int csize = 0;
+                            int ltdatesize = 0;
+                            int strikesize = 0;
+                            int ltprsize = 0;
+                            int bidsize = 0;
+                            int asksize = 0;
+                            int chgsize = 0;
+                            int pchgsize = 0;
+                            int vsize = 0;
+                            int oisize = 0;
+                            int ivsize = 0;
+
+                            for (int y = 0; y < allcalls.Count; y++)
                             {
-                                string[] cname = allcalls[y].Split(':');
-
-                                //contractname.Items.Add(cname[1].Trim('"'));
-                                datagrid1.Items.Add(new OptionsData { col1 = cname[1].Trim().Trim('"') });
-                            }*/
-
-                            //MessageBox.Show(allcalls[y].ToLower());
-
-                            if (allcalls[y].ToLower().Contains("contractsymbol"))
-                            {
-                                string[] cname = allcalls[y].Split(':');
-                                coname.Add(cname[1].Trim().Trim('"'));
-
-                                if (csize != 0)
+                                /*
+                                if (allcalls[y].ToLower().Contains("contractsymbol"))
                                 {
-                                    if (csize != vsize)
+                                    string[] cname = allcalls[y].Split(':');
+
+                                    //contractname.Items.Add(cname[1].Trim('"'));
+                                    datagrid1.Items.Add(new OptionsData { col1 = cname[1].Trim().Trim('"') });
+                                }*/
+
+                                //MessageBox.Show(allcalls[y].ToLower());
+
+                                if (allcalls[y].ToLower().Contains("contractsymbol"))
+                                {
+                                    string[] cname = allcalls[y].Split(':');
+                                    coname.Add(cname[1].Trim().Trim('"'));
+
+                                    if (csize != 0)
                                     {
-                                        vol.Add("-");
-                                        vsize++;
+                                        if (csize != vsize)
+                                        {
+                                            vol.Add("-");
+                                            vsize++;
+                                        }
+
+                                        if (csize != pchgsize)
+                                        {
+                                            pchg.Add("-");
+                                            pchgsize++;
+                                        }
+
+                                        if (csize != oisize)
+                                        {
+                                            oi.Add("-");
+                                            oisize++;
+                                        }
+
+                                        if (csize != ltdatesize)
+                                        {
+                                            ltdate.Add("-");
+                                            ltdatesize++;
+                                        }
+
+                                        if (csize != strikesize)
+                                        {
+                                            strike.Add("-");
+                                            strikesize++;
+                                        }
+
+                                        if (csize != ltprsize)
+                                        {
+                                            ltpr.Add("-");
+                                            ltprsize++;
+                                        }
+
+                                        if (csize != bidsize)
+                                        {
+                                            bid.Add("-");
+                                            bidsize++;
+                                        }
+
+                                        if (csize != asksize)
+                                        {
+                                            ask.Add("-");
+                                            asksize++;
+                                        }
+
+                                        if (csize != chgsize)
+                                        {
+                                            chg.Add("-");
+                                            chgsize++;
+                                        }
+
+                                        if (csize != ivsize)
+                                        {
+                                            iv.Add("-");
+                                            ivsize++;
+                                        }
+
                                     }
 
-                                    if (csize != pchgsize)
-                                    {
-                                        pchg.Add("-");
-                                        pchgsize++;
-                                    }
-
-                                    if (csize != oisize)
-                                    {
-                                        oi.Add("-");
-                                        oisize++;
-                                    }
-
+                                    csize++;
                                 }
 
-                                csize++;
+                                if (allcalls[y].ToLower().Contains("lasttradedate"))
+                                {
+                                    string[] cname = allcalls[y].Split(':');
+                                    DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(long.Parse(cname[1].Trim().Trim('"')));
+                                    //Console.WriteLine(dateTimeOffset2.ToString("MM-dd-yyyy hh:mm:ss tt"));
+
+                                    ltdate.Add(dateTimeOffset.ToString("MM-dd-yyyy hh:mm:ss tt"));
+                                    ltdatesize++;
+                                }
+
+                                if (allcalls[y].ToLower().Contains("strike"))
+                                {
+                                    string[] cname = allcalls[y].Split(':');
+                                    strike.Add(cname[1].Trim().Trim('"'));
+                                    strikesize++;
+                                }
+
+                                if (allcalls[y].ToLower().Contains("lastprice"))
+                                {
+                                    string[] cname = allcalls[y].Split(':');
+                                    ltpr.Add(cname[1].Trim().Trim('"'));
+                                    ltprsize++;
+                                }
+
+                                if (allcalls[y].ToLower().Contains("bid"))
+                                {
+                                    string[] cname = allcalls[y].Split(':');
+                                    bid.Add(cname[1].Trim().Trim('"'));
+                                    bidsize++;
+                                }
+
+                                if (allcalls[y].ToLower().Contains("ask"))
+                                {
+                                    string[] cname = allcalls[y].Split(':');
+                                    ask.Add(cname[1].Trim().Trim('"'));
+                                    asksize++;
+                                }
+
+                                if ((allcalls[y].ToLower().Contains("change")) & (!(allcalls[y].ToLower().Contains("percentchange"))))
+                                {
+                                    string[] cname = allcalls[y].Split(':');
+                                    double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
+                                    temp = Math.Round(temp, 2);
+                                    chg.Add(temp.ToString());
+                                    chgsize++;
+                                }
+
+                                if (allcalls[y].ToLower().Contains("percentchange"))
+                                {
+                                    string[] cname = allcalls[y].Split(':');
+                                    double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
+                                    temp = Math.Round(temp, 2);
+                                    pchg.Add(temp.ToString() + "%");
+                                    pchgsize++;
+                                }
+
+                                if (allcalls[y].ToLower().Contains("volume"))
+                                {
+                                    string[] cname = allcalls[y].Split(':');
+                                    vol.Add(cname[1].Trim().Trim('"'));
+                                    vsize++;
+                                }
+
+                                if (allcalls[y].ToLower().Contains("openinterest"))
+                                {
+                                    string[] cname = allcalls[y].Split(':');
+                                    oi.Add(cname[1].Trim().Trim('"'));
+                                    oisize++;
+                                }
+
+                                if (allcalls[y].ToLower().Contains("impliedvolatility"))
+                                {
+                                    string[] cname = allcalls[y].Split(':');
+                                    double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
+                                    temp = Math.Round(temp * 100, 2);
+                                    iv.Add(temp.ToString() + "%"); ;
+                                    ivsize++;
+                                }
+
+
                             }
 
-                            if (allcalls[y].ToLower().Contains("lasttradedate"))
+                            if (csize != vsize)
                             {
-                                string[] cname = allcalls[y].Split(':');
-                                DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(long.Parse(cname[1].Trim().Trim('"')));
-                                //Console.WriteLine(dateTimeOffset2.ToString("MM-dd-yyyy hh:mm:ss tt"));
-
-                                ltdate.Add(dateTimeOffset.ToString("MM-dd-yyyy hh:mm:ss tt"));
-                            }
-
-                            if (allcalls[y].ToLower().Contains("strike"))
-                            {
-                                string[] cname = allcalls[y].Split(':');
-                                strike.Add(cname[1].Trim().Trim('"'));
-                            }
-
-                            if (allcalls[y].ToLower().Contains("lastprice"))
-                            {
-                                string[] cname = allcalls[y].Split(':');
-                                ltpr.Add(cname[1].Trim().Trim('"'));
-                            }
-
-                            if (allcalls[y].ToLower().Contains("bid"))
-                            {
-                                string[] cname = allcalls[y].Split(':');
-                                bid.Add(cname[1].Trim().Trim('"'));
-                            }
-
-                            if (allcalls[y].ToLower().Contains("ask"))
-                            {
-                                string[] cname = allcalls[y].Split(':');
-                                ask.Add(cname[1].Trim().Trim('"'));
-                            }
-
-                            if ((allcalls[y].ToLower().Contains("change")) & (!(allcalls[y].ToLower().Contains("percentchange"))))
-                            {
-                                string[] cname = allcalls[y].Split(':');
-                                double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
-                                temp = Math.Round(temp, 2);
-                                chg.Add(temp.ToString());
-                            }
-
-                            if (allcalls[y].ToLower().Contains("percentchange"))
-                            {
-                                string[] cname = allcalls[y].Split(':');
-                                double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
-                                temp = Math.Round(temp, 2);
-                                pchg.Add(temp.ToString() + "%");
-                                pchgsize++;
-                            }
-
-                            if (allcalls[y].ToLower().Contains("volume"))
-                            {
-                                string[] cname = allcalls[y].Split(':');
-                                vol.Add(cname[1].Trim().Trim('"'));
+                                vol.Add("-");
                                 vsize++;
                             }
 
-                            if (allcalls[y].ToLower().Contains("openinterest"))
+                            if (csize != pchgsize)
                             {
-                                string[] cname = allcalls[y].Split(':');
-                                oi.Add(cname[1].Trim().Trim('"'));
-                                oisize++;
-                            }
-
-                            if (allcalls[y].ToLower().Contains("impliedvolatility"))
-                            {
-                                string[] cname = allcalls[y].Split(':');
-                                double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
-                                temp = Math.Round(temp * 100, 2);
-                                iv.Add(temp.ToString() + "%"); ;
-
-                            }
-
-
-                        }
-
-                        if (csize != vsize)
-                        {
-                            vol.Add("-");
-                            vsize++;
-                        }
-
-                        if (csize != pchgsize)
-                        {
-                            pchg.Add("-");
-                            pchgsize++;
-                        }
-
-                        if (csize != oisize)
-                        {
-                            oi.Add("-");
-                            oisize++;
-                        }
-
-                    }
-                }
-
-
-                if (optiontype.SelectedIndex == 1)
-                {
-                    if (allputs.Count > 0)
-                    {
-                        int csize = 0;
-                        int vsize = 0;
-                        int pchgsize = 0;
-                        int oisize = 0;
-
-                        for (int y = 0; y < allputs.Count; y++)
-                        {
-                            /*
-                            if (allcalls[y].ToLower().Contains("contractsymbol"))
-                            {
-                                string[] cname = allcalls[y].Split(':');
-
-                                //contractname.Items.Add(cname[1].Trim('"'));
-                                datagrid1.Items.Add(new OptionsData { col1 = cname[1].Trim().Trim('"') });
-                            }*/
-
-                            //MessageBox.Show(allcalls[y].ToLower());
-
-                            if (allputs[y].ToLower().Contains("contractsymbol"))
-                            {
-                                string[] cname = allputs[y].Split(':');
-                                coname.Add(cname[1].Trim().Trim('"'));
-
-                                if (csize != 0)
-                                {
-                                    if (csize != vsize)
-                                    {
-                                        vol.Add("-");
-                                        vsize++;
-                                    }
-
-                                    if (csize != pchgsize)
-                                    {
-                                        pchg.Add("-");
-                                        pchgsize++;
-                                    }
-
-                                    if (csize != oisize)
-                                    {
-                                        oi.Add("-");
-                                        oisize++;
-                                    }
-
-                                }
-
-                                csize++;
-                            }
-
-                            if (allputs[y].ToLower().Contains("lasttradedate"))
-                            {
-                                string[] cname = allputs[y].Split(':');
-                                DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(long.Parse(cname[1].Trim().Trim('"')));
-                                //Console.WriteLine(dateTimeOffset2.ToString("MM-dd-yyyy hh:mm:ss tt"));
-
-                                ltdate.Add(dateTimeOffset.ToString("MM-dd-yyyy hh:mm:ss tt"));
-                            }
-
-                            if (allputs[y].ToLower().Contains("strike"))
-                            {
-                                string[] cname = allputs[y].Split(':');
-                                strike.Add(cname[1].Trim().Trim('"'));
-                            }
-
-                            if (allputs[y].ToLower().Contains("lastprice"))
-                            {
-                                string[] cname = allputs[y].Split(':');
-                                ltpr.Add(cname[1].Trim().Trim('"'));
-                            }
-
-                            if (allputs[y].ToLower().Contains("bid"))
-                            {
-                                string[] cname = allputs[y].Split(':');
-                                bid.Add(cname[1].Trim().Trim('"'));
-                            }
-
-                            if (allputs[y].ToLower().Contains("ask"))
-                            {
-                                string[] cname = allputs[y].Split(':');
-                                ask.Add(cname[1].Trim().Trim('"'));
-                            }
-
-                            if ((allputs[y].ToLower().Contains("change")) & (!(allputs[y].ToLower().Contains("percentchange"))))
-                            {
-                                string[] cname = allputs[y].Split(':');
-                                double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
-                                temp = Math.Round(temp, 2);
-                                chg.Add(temp.ToString());
-                            }
-
-                            if (allputs[y].ToLower().Contains("percentchange"))
-                            {
-                                string[] cname = allputs[y].Split(':');
-                                double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
-                                temp = Math.Round(temp, 2);
-                                pchg.Add(temp.ToString() + "%");
+                                pchg.Add("-");
                                 pchgsize++;
                             }
 
-                            if (allputs[y].ToLower().Contains("volume"))
+                            if (csize != oisize)
                             {
-                                string[] cname = allputs[y].Split(':');
-                                vol.Add(cname[1].Trim().Trim('"'));
-                                vsize++;
-                            }
-
-                            if (allputs[y].ToLower().Contains("openinterest"))
-                            {
-                                string[] cname = allputs[y].Split(':');
-                                oi.Add(cname[1].Trim().Trim('"'));
+                                oi.Add("-");
                                 oisize++;
                             }
 
-                            if (allputs[y].ToLower().Contains("impliedvolatility"))
+                            if (csize != ltdatesize)
                             {
-                                string[] cname = allputs[y].Split(':');
-                                double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
-                                temp = Math.Round(temp * 100, 2);
-                                iv.Add(temp.ToString() + "%"); ;
+                                ltdate.Add("-");
+                                ltdatesize++;
+                            }
 
+                            if (csize != strikesize)
+                            {
+                                strike.Add("-");
+                                strikesize++;
+                            }
+
+                            if (csize != ltprsize)
+                            {
+                                ltpr.Add("-");
+                                ltprsize++;
+                            }
+
+                            if (csize != bidsize)
+                            {
+                                bid.Add("-");
+                                bidsize++;
+                            }
+
+                            if (csize != asksize)
+                            {
+                                ask.Add("-");
+                                asksize++;
+                            }
+
+                            if (csize != chgsize)
+                            {
+                                chg.Add("-");
+                                chgsize++;
+                            }
+
+                            if (csize != ivsize)
+                            {
+                                iv.Add("-");
+                                ivsize++;
                             }
 
                         }
-
-                        if (csize != vsize)
-                        {
-                            vol.Add("-");
-                            vsize++;
-                        }
-
-                        if (csize != pchgsize)
-                        {
-                            pchg.Add("-");
-                            pchgsize++;
-                        }
-
-                        if (csize != oisize)
-                        {
-                            oi.Add("-");
-                            oisize++;
-                        }
-
                     }
-                }
+
+
+                    if (optiontype.SelectedIndex == 1)
+                    {
+                        if (allputs.Count > 0)
+                        {
+                            int csize = 0;
+                            int ltdatesize = 0;
+                            int strikesize = 0;
+                            int ltprsize = 0;
+                            int bidsize = 0;
+                            int asksize = 0;
+                            int chgsize = 0;
+                            int pchgsize = 0;
+                            int vsize = 0;
+                            int oisize = 0;
+                            int ivsize = 0;
+
+                            for (int y = 0; y < allputs.Count; y++)
+                            {
+                                /*
+                                if (allcalls[y].ToLower().Contains("contractsymbol"))
+                                {
+                                    string[] cname = allcalls[y].Split(':');
+
+                                    //contractname.Items.Add(cname[1].Trim('"'));
+                                    datagrid1.Items.Add(new OptionsData { col1 = cname[1].Trim().Trim('"') });
+                                }*/
+
+                                //MessageBox.Show(allcalls[y].ToLower());
+
+                                if (allputs[y].ToLower().Contains("contractsymbol"))
+                                {
+                                    string[] cname = allputs[y].Split(':');
+                                    coname.Add(cname[1].Trim().Trim('"'));
+
+                                    if (csize != 0)
+                                    {
+                                        if (csize != vsize)
+                                        {
+                                            vol.Add("-");
+                                            vsize++;
+                                        }
+
+                                        if (csize != pchgsize)
+                                        {
+                                            pchg.Add("-");
+                                            pchgsize++;
+                                        }
+
+                                        if (csize != oisize)
+                                        {
+                                            oi.Add("-");
+                                            oisize++;
+                                        }
+
+                                        if (csize != ltdatesize)
+                                        {
+                                            ltdate.Add("-");
+                                            ltdatesize++;
+                                        }
+
+                                        if (csize != strikesize)
+                                        {
+                                            strike.Add("-");
+                                            strikesize++;
+                                        }
+
+                                        if (csize != ltprsize)
+                                        {
+                                            ltpr.Add("-");
+                                            ltprsize++;
+                                        }
+
+                                        if (csize != bidsize)
+                                        {
+                                            bid.Add("-");
+                                            bidsize++;
+                                        }
+
+                                        if (csize != asksize)
+                                        {
+                                            ask.Add("-");
+                                            asksize++;
+                                        }
+
+                                        if (csize != chgsize)
+                                        {
+                                            chg.Add("-");
+                                            chgsize++;
+                                        }
+
+                                        if (csize != ivsize)
+                                        {
+                                            iv.Add("-");
+                                            ivsize++;
+                                        }
+
+                                    }
+
+                                    csize++;
+                                }
+
+                                if (allputs[y].ToLower().Contains("lasttradedate"))
+                                {
+                                    string[] cname = allputs[y].Split(':');
+                                    DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(long.Parse(cname[1].Trim().Trim('"')));
+                                    //Console.WriteLine(dateTimeOffset2.ToString("MM-dd-yyyy hh:mm:ss tt"));
+
+                                    ltdate.Add(dateTimeOffset.ToString("MM-dd-yyyy hh:mm:ss tt"));
+                                    ltdatesize++;
+                                }
+
+                                if (allputs[y].ToLower().Contains("strike"))
+                                {
+                                    string[] cname = allputs[y].Split(':');
+                                    strike.Add(cname[1].Trim().Trim('"'));
+                                    strikesize++;
+                                }
+
+                                if (allputs[y].ToLower().Contains("lastprice"))
+                                {
+                                    string[] cname = allputs[y].Split(':');
+                                    ltpr.Add(cname[1].Trim().Trim('"'));
+                                    ltprsize++;
+                                }
+
+                                if (allputs[y].ToLower().Contains("bid"))
+                                {
+                                    string[] cname = allputs[y].Split(':');
+                                    bid.Add(cname[1].Trim().Trim('"'));
+                                    bidsize++;
+                                }
+
+                                if (allputs[y].ToLower().Contains("ask"))
+                                {
+                                    string[] cname = allputs[y].Split(':');
+                                    ask.Add(cname[1].Trim().Trim('"'));
+                                    asksize++;
+                                }
+
+                                if ((allputs[y].ToLower().Contains("change")) & (!(allputs[y].ToLower().Contains("percentchange"))))
+                                {
+                                    string[] cname = allputs[y].Split(':');
+                                    double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
+                                    temp = Math.Round(temp, 2);
+                                    chg.Add(temp.ToString());
+                                    chgsize++;
+                                }
+
+                                if (allputs[y].ToLower().Contains("percentchange"))
+                                {
+                                    string[] cname = allputs[y].Split(':');
+                                    double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
+                                    temp = Math.Round(temp, 2);
+                                    pchg.Add(temp.ToString() + "%");
+                                    pchgsize++;
+                                }
+
+                                if (allputs[y].ToLower().Contains("volume"))
+                                {
+                                    string[] cname = allputs[y].Split(':');
+                                    vol.Add(cname[1].Trim().Trim('"'));
+                                    vsize++;
+                                }
+
+                                if (allputs[y].ToLower().Contains("openinterest"))
+                                {
+                                    string[] cname = allputs[y].Split(':');
+                                    oi.Add(cname[1].Trim().Trim('"'));
+                                    oisize++;
+                                }
+
+                                if (allputs[y].ToLower().Contains("impliedvolatility"))
+                                {
+                                    string[] cname = allputs[y].Split(':');
+                                    double temp = Convert.ToDouble(cname[1].Trim().Trim('"'));
+                                    temp = Math.Round(temp * 100, 2);
+                                    iv.Add(temp.ToString() + "%"); ;
+                                    ivsize++;
+                                }
+
+                            }
+
+                            if (csize != vsize)
+                            {
+                                vol.Add("-");
+                                vsize++;
+                            }
+
+                            if (csize != pchgsize)
+                            {
+                                pchg.Add("-");
+                                pchgsize++;
+                            }
+
+                            if (csize != oisize)
+                            {
+                                oi.Add("-");
+                                oisize++;
+                            }
+
+                            if (csize != ltdatesize)
+                            {
+                                ltdate.Add("-");
+                                ltdatesize++;
+                            }
+
+                            if (csize != strikesize)
+                            {
+                                strike.Add("-");
+                                strikesize++;
+                            }
+
+                            if (csize != ltprsize)
+                            {
+                                ltpr.Add("-");
+                                ltprsize++;
+                            }
+
+                            if (csize != bidsize)
+                            {
+                                bid.Add("-");
+                                bidsize++;
+                            }
+
+                            if (csize != asksize)
+                            {
+                                ask.Add("-");
+                                asksize++;
+                            }
+
+                            if (csize != chgsize)
+                            {
+                                chg.Add("-");
+                                chgsize++;
+                            }
+
+                            if (csize != ivsize)
+                            {
+                                iv.Add("-");
+                                ivsize++;
+                            }
+
+                        }
+                    }
 
 
 
-                if (coname.Count > 0)
-                {
-
-                    for (int y = 0; y < coname.Count; y++)
+                    if (coname.Count > 0)
                     {
 
-                        datagrid1.Items.Add(new OptionsData { col1 = coname[y].Trim().Trim('"'), col2 = ltdate[y].Trim().Trim('"'), col3 = strike[y].Trim().Trim('"'), col4 = ltpr[y].Trim().Trim('"'), col5 = bid[y].Trim().Trim('"'), col6 = ask[y].Trim().Trim('"'), col7 = chg[y].Trim().Trim('"'), col8 = pchg[y].Trim().Trim('"'), col9 = vol[y].Trim().Trim('"'), col10 = oi[y].Trim().Trim('"'), col11 = iv[y].Trim().Trim('"') });
+                        for (int y = 0; y < coname.Count; y++)
+                        {
+
+                            datagrid1.Items.Add(new OptionsData { col1 = coname[y].Trim().Trim('"'), col2 = ltdate[y].Trim().Trim('"'), col3 = strike[y].Trim().Trim('"'), col4 = ltpr[y].Trim().Trim('"'), col5 = bid[y].Trim().Trim('"'), col6 = ask[y].Trim().Trim('"'), col7 = chg[y].Trim().Trim('"'), col8 = pchg[y].Trim().Trim('"'), col9 = vol[y].Trim().Trim('"'), col10 = oi[y].Trim().Trim('"'), col11 = iv[y].Trim().Trim('"') });
 
 
+                        }
+                    }
+                }
+
+                else
+                {
+
+                    lastsymbol = symb.Text;
+                    Task<int> datatask = DownloadYfinanceoptions(symb.Text, optiondate.SelectedIndex, optiontype.SelectedIndex);
+                    int x = await datatask;
+
+                    stprice.Text = symquote;
+
+                    if (expdate.Count > 0)
+                    {
+                        optiondate.Items.Clear();
+                        for (int y = 0; y < expdate.Count; y++)
+                        {
+                            DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expdate[y]));
+                            optiondate.Items.Add(dateTimeOffset.ToString("MM-dd-yyyy"));
+                        }
                     }
 
+
+                    optiondate.SelectedIndex = 0;
+                    datagrid1.Items.Clear();
+
                 }
+
+                
 
                 /*
 
@@ -462,8 +688,8 @@ namespace optionsanalyzer
 
                 //MessageBox.Show(dateTimeOffset.ToString("MM-dd-yyyy"));
                 //Console.WriteLine(dateTimeOffset2.ToString("MM-dd-yyyy hh:mm:ss tt"));
-              
 
+                lastsymbol = symb.Text;
                 Task<int> datatask = DownloadYfinanceoptions(symb.Text, optiondate.SelectedIndex, optiontype.SelectedIndex);
                 int x = await datatask;
 
@@ -478,33 +704,19 @@ namespace optionsanalyzer
                         optiondate.Items.Add(dateTimeOffset.ToString("MM-dd-yyyy"));
                     }
                 }
+
+
                 optiondate.SelectedIndex = 0;
 
-                //datagrid1.Items.Add(new OptionsData { col1 = "a", col2 = "b" });             
 
-                /*
 
-                uxDGV.Rows.Clear();
-                int rowCount = dataGridView1.Rows.Count;
-                for (int n = 0; n < rowCount; n++)
-                {
-                    if (dataGridView1.Rows[0].IsNewRow == false)
-                        dataGridView1.Rows.RemoveAt(0);
-                }
-                */
 
-                //fill listbox
-                /*
-                for (int y = 0; y < allcalls.Count; y++)
-                {
-                    if (allcalls[y].ToLower().Contains("contractsymbol"))
-                    {
-                        string[] cname = allcalls[y].Split(':');
 
-                        contractname.Items.Add(cname[1].Trim('"'));
-                    }
-                }
-                */
+                datagrid1.Items.Clear();
+
+                //DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(1603411200);
+                //DateTimeOffset dateTimeOffset2 = DateTimeOffset.FromUnixTimeSeconds(1601571384);
+
             }
 
             else
@@ -521,7 +733,7 @@ namespace optionsanalyzer
         {
             allcalls.Clear();
             allputs.Clear();
-
+         
 
             using (var httpClient = new HttpClient())
             {
