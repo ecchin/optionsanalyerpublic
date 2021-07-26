@@ -45,7 +45,7 @@ namespace optionsanalyzer
         static List<string> allcalls = new List<string>();
         static List<string> allputs = new List<string>();
         static string lastsymbol = null;
-    
+
 
         public MainWindow()
         {
@@ -57,13 +57,82 @@ namespace optionsanalyzer
             optiondate.SelectedIndex = 0;
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
+        
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            txt1.Text = (Convert.ToDouble(stcost.Text) - Convert.ToDouble(premcol.Text)).ToString();
+            txt2.Text = (((Convert.ToDouble(premcol.Text) * 100) * Convert.ToDouble(cont.Text)) - ((Convert.ToDouble(stcost.Text) - Convert.ToDouble(stprice.Text)) * 100 * Convert.ToDouble(cont.Text))).ToString();
+            txt3.Text = (((Convert.ToDouble(premcol.Text) * 100) * Convert.ToDouble(cont.Text)) - ((Convert.ToDouble(stcost.Text) - Convert.ToDouble(strike.Text)) * 100 * Convert.ToDouble(cont.Text))).ToString();
+
+        }
+
+
+
+        private async void Button_Click_2(object sender, RoutedEventArgs e)
         {
             if (symb.Text.Length > 0)
             {
-                if (symb.Text == lastsymbol)
-                {
 
+                //DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(1603411200);
+                //DateTimeOffset dateTimeOffset2 = DateTimeOffset.FromUnixTimeSeconds(1601571384);
+
+                //MessageBox.Show(dateTimeOffset.ToString("MM-dd-yyyy"));
+                //Console.WriteLine(dateTimeOffset2.ToString("MM-dd-yyyy hh:mm:ss tt"));
+
+                int chgs = 0;
+
+                if (lastsymbol == null)
+                {
+                    lastsymbol = symb.Text;
+                    chgs = 1;
+                }
+
+                else
+                {
+                    if (symb.Text == lastsymbol)
+                    {
+                        chgs = 0;
+                    }
+
+                    else
+                    {
+                        chgs = 1;
+                        optiondate.SelectedIndex = 0;
+
+                    }
+
+                }
+
+                //MessageBox.Show(chgs.ToString());
+                Task<int> datatask = DownloadYfinanceoptions(symb.Text, optiondate.SelectedIndex, optiontype.SelectedIndex, chgs);
+                int x = await datatask;
+
+                stprice.Text = symquote;
+
+                if (chgs == 1)
+                {
+                    if (expdate.Count > 0)
+                    {
+                        optiondate.Items.Clear();
+                        for (int y = 0; y < expdate.Count; y++)
+                        {
+                            DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expdate[y]));
+                            optiondate.Items.Add(dateTimeOffset.ToString("MM-dd-yyyy"));
+                        }
+                    }
+
+
+                    optiondate.SelectedIndex = 0;
+                    datagrid1.Items.Clear();
+
+
+                    lastsymbol = symb.Text;
+                }
+
+
+
+                
+              
                     datagrid1.Items.Clear();
 
                     //DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(1603411200);
@@ -83,8 +152,8 @@ namespace optionsanalyzer
                     List<string> oi = new List<string>();
                     List<string> iv = new List<string>();
 
-                    Task<int> datatask = DownloadYfinanceoptions(symb.Text, optiondate.SelectedIndex, optiontype.SelectedIndex);
-                    int x = await datatask;
+                    //Task<int> datatask = DownloadYfinanceoptions(symb.Text, optiondate.SelectedIndex, optiontype.SelectedIndex);
+                    //int x = await datatask;
 
                     col1.Binding = new Binding("col1");
                     col2.Binding = new Binding("col2");
@@ -118,14 +187,7 @@ namespace optionsanalyzer
 
                             for (int y = 0; y < allcalls.Count; y++)
                             {
-                                /*
-                                if (allcalls[y].ToLower().Contains("contractsymbol"))
-                                {
-                                    string[] cname = allcalls[y].Split(':');
-
-                                    //contractname.Items.Add(cname[1].Trim('"'));
-                                    datagrid1.Items.Add(new OptionsData { col1 = cname[1].Trim().Trim('"') });
-                                }*/
+                               
 
                                 //MessageBox.Show(allcalls[y].ToLower());
 
@@ -365,14 +427,7 @@ namespace optionsanalyzer
 
                             for (int y = 0; y < allputs.Count; y++)
                             {
-                                /*
-                                if (allcalls[y].ToLower().Contains("contractsymbol"))
-                                {
-                                    string[] cname = allcalls[y].Split(':');
-
-                                    //contractname.Items.Add(cname[1].Trim('"'));
-                                    datagrid1.Items.Add(new OptionsData { col1 = cname[1].Trim().Trim('"') });
-                                }*/
+                                
 
                                 //MessageBox.Show(allcalls[y].ToLower());
 
@@ -605,114 +660,12 @@ namespace optionsanalyzer
 
                         }
                     }
-                }
-
-                else
-                {
-
-                    lastsymbol = symb.Text;
-                    Task<int> datatask = DownloadYfinanceoptions(symb.Text, optiondate.SelectedIndex, optiontype.SelectedIndex);
-                    int x = await datatask;
-
-                    stprice.Text = symquote;
-
-                    if (expdate.Count > 0)
-                    {
-                        optiondate.Items.Clear();
-                        for (int y = 0; y < expdate.Count; y++)
-                        {
-                            DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expdate[y]));
-                            optiondate.Items.Add(dateTimeOffset.ToString("MM-dd-yyyy"));
-                        }
-                    }
-
-
-                    optiondate.SelectedIndex = 0;
-                    datagrid1.Items.Clear();
-
-                }
-
+                
                 
 
-                /*
-
-                uxDGV.Rows.Clear();
-                int rowCount = dataGridView1.Rows.Count;
-                for (int n = 0; n < rowCount; n++)
-                {
-                    if (dataGridView1.Rows[0].IsNewRow == false)
-                        dataGridView1.Rows.RemoveAt(0);
-                }
-                */
-
-                //fill listbox
-                /*
-                for (int y = 0; y < allcalls.Count; y++)
-                {
-                    if (allcalls[y].ToLower().Contains("contractsymbol"))
-                    {
-                        string[] cname = allcalls[y].Split(':');
-
-                        contractname.Items.Add(cname[1].Trim('"'));
-                    }
-                }
-                */
-            }
-
-            else
-            {
-                MessageBox.Show("Enter symbol");
-            }
 
 
 
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            txt1.Text = (Convert.ToDouble(stcost.Text) - Convert.ToDouble(premcol.Text)).ToString();
-            txt2.Text = (((Convert.ToDouble(premcol.Text) * 100) * Convert.ToDouble(cont.Text)) - ((Convert.ToDouble(stcost.Text) - Convert.ToDouble(stprice.Text)) * 100 * Convert.ToDouble(cont.Text))).ToString();
-            txt3.Text = (((Convert.ToDouble(premcol.Text) * 100) * Convert.ToDouble(cont.Text)) - ((Convert.ToDouble(stcost.Text) - Convert.ToDouble(strike.Text)) * 100 * Convert.ToDouble(cont.Text))).ToString();
-
-        }
-
-
-
-        private async void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            if (symb.Text.Length > 0)
-            {
-
-                //DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(1603411200);
-                //DateTimeOffset dateTimeOffset2 = DateTimeOffset.FromUnixTimeSeconds(1601571384);
-
-                //MessageBox.Show(dateTimeOffset.ToString("MM-dd-yyyy"));
-                //Console.WriteLine(dateTimeOffset2.ToString("MM-dd-yyyy hh:mm:ss tt"));
-
-                lastsymbol = symb.Text;
-                Task<int> datatask = DownloadYfinanceoptions(symb.Text, optiondate.SelectedIndex, optiontype.SelectedIndex);
-                int x = await datatask;
-
-                stprice.Text = symquote;
-
-                if (expdate.Count > 0)
-                {
-                    optiondate.Items.Clear();
-                    for (int y = 0; y < expdate.Count; y++)
-                    {
-                        DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expdate[y]));
-                        optiondate.Items.Add(dateTimeOffset.ToString("MM-dd-yyyy"));
-                    }
-                }
-
-
-                optiondate.SelectedIndex = 0;
-
-
-
-
-
-                datagrid1.Items.Clear();
 
                 //DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(1603411200);
                 //DateTimeOffset dateTimeOffset2 = DateTimeOffset.FromUnixTimeSeconds(1601571384);
@@ -729,7 +682,7 @@ namespace optionsanalyzer
 
 
         //static async Task<int> DownloadYfinanceoptions(string sym)
-        static async Task<int> DownloadYfinanceoptions(string sym, int dateind, int optind)
+        static async Task<int> DownloadYfinanceoptions(string sym, int dateind, int optind, int chgs)
         {
             allcalls.Clear();
             allputs.Clear();
@@ -741,7 +694,7 @@ namespace optionsanalyzer
 
                 string date = "";
 
-                if (expdate.Count == 0)
+                if ((expdate.Count == 0) || (chgs == 1))
                 {
                     date = "";
                 }

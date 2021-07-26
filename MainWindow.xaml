@@ -42,11 +42,10 @@
         <Label Content="P&amp;L after option expires and sold at current price" HorizontalAlignment="Left" Margin="176,2,0,0" VerticalAlignment="Top" Grid.Row="1"/>
         <Label Content="P&amp;L after option expires and sold at strike price" HorizontalAlignment="Left" Margin="176,67,0,0" VerticalAlignment="Top" Grid.Row="1"/>
         <Button Content="Calculate" HorizontalAlignment="Left" Margin="176,136,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1" Grid.Row="1"/>
-        <Button Content="Load current stock data" HorizontalAlignment="Left" Margin="559,8,0,0" VerticalAlignment="Top" Width="129" Click="Button_Click_2"/>
-        <Button Content="Load option chain" HorizontalAlignment="Left" Margin="922,6,0,0" VerticalAlignment="Top" Width="111" Click="Button_Click" RenderTransformOrigin="0.495,0.35"/>
-        <ComboBox x:Name="optiontype" HorizontalAlignment="Left" Margin="719,6,0,0" VerticalAlignment="Top" Width="67"/>
+        <Button Content="Load current stock data" HorizontalAlignment="Left" Margin="688,14,0,0" VerticalAlignment="Top" Width="129" Click="Button_Click_2"/>
+        <ComboBox x:Name="optiontype" HorizontalAlignment="Left" Margin="848,12,0,0" VerticalAlignment="Top" Width="67"/>
 
-        <ComboBox x:Name="optiondate" HorizontalAlignment="Left" Margin="801,6,0,0" VerticalAlignment="Top" Width="103"/>
+        <ComboBox x:Name="optiondate" HorizontalAlignment="Left" Margin="930,12,0,0" VerticalAlignment="Top" Width="103"/>
         <DataGrid x:Name="datagrid1" HorizontalAlignment="Left" Height="454" Margin="487,49,0,0" VerticalAlignment="Top" Width="546" Grid.RowSpan="2">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="col1" Header = "Contract Name" Binding = "{Binding Name}" />
